@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    // 只做联想提示@
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
