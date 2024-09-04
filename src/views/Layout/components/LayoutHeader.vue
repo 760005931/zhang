@@ -3,11 +3,11 @@ import {getCategoryAPI} from '@/apis/layout'
 import { onMounted,ref } from 'vue';
 const categoryList = ref([])
 const getCategory = async() => {
-    const res =await getCategoryAPI()
+    const res =  await getCategoryAPI()
     categoryList.value = res.result
 }
 onMounted(() => {
-    getCategory()
+     getCategory()
 })
 </script> 
 
