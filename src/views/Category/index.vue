@@ -1,35 +1,12 @@
 <script setup>
-import {getCategoryAPI} from "@/apis/category.js";
-import {ref,onMounted} from 'vue'
-import {useRoute} from "vue-router";
-import {getBannerAPI} from "@/apis/home.js";
-import GoodsItem from "@/views/Home/components/GoodsItem.vue";
-import {onBeforeRouteUpdate} from "vue-router";
-//获取数据
-const categoryData = ref({})
-const route = useRoute()
-const getCategory = async (id = route.params.id) => {
-  const res = await getCategoryAPI(id)
-  categoryData.value = res.result
-}
-onMounted(() => {
-  getBanner()
-})
-//目标:路由参数变化时候,可以把分类数据接口重新发送
-onBeforeRouteUpdate((to) =>{
-  //存在文件:使用最新的路由参数请求最新的数据
-  getCategory(to.params.id)
-})
-//获取banner
-const bannerList = ref([])
-const getBanner =async() => {
-  const res = await getBannerAPI({
-    distributionSite:'2'
-  })
-  bannerList.value = res.result
-}
 
-onMounted(() => getCategory())
+import {useBanner} from "@/views/Category/composables/useBanner.js";
+import GoodsItem from "@/views/Home/components/GoodsItem.vue";
+import {useCategory} from "@/views/Category/composables/useCategory.js";
+const {categoryData} = useCategory()
+const {bannerList} = useBanner()
+
+
 </script>
 
 <template>
@@ -38,7 +15,7 @@ onMounted(() => getCategory())
       <!-- 面包屑 -->
       <div class="bread-container">
         <el-breadcrumb separator=">">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item to="{ path: '/' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item>{{categoryData.name}}</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
@@ -57,7 +34,7 @@ onMounted(() => getCategory())
         <ul>
           <li v-for="i in categoryData.children" :key="i.id">
             <RouterLink to="/">
-              <img :src="i.picture" />
+              <img :src="i.picture" alt=""/>
               <p>{{ i.name }}</p>
             </RouterLink>
           </li>
