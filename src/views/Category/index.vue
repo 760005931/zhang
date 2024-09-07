@@ -4,13 +4,22 @@ import {ref,onMounted} from 'vue'
 import {useRoute} from "vue-router";
 import {getBannerAPI} from "@/apis/home.js";
 import GoodsItem from "@/views/Home/components/GoodsItem.vue";
+import {onBeforeRouteUpdate} from "vue-router";
 //获取数据
 const categoryData = ref({})
 const route = useRoute()
-const getCategory = async () => {
-  const res = await getCategoryAPI(route.params.id)
+const getCategory = async (id = route.params.id) => {
+  const res = await getCategoryAPI(id)
   categoryData.value = res.result
 }
+onMounted(() => {
+  getBanner()
+})
+//目标:路由参数变化时候,可以把分类数据接口重新发送
+onBeforeRouteUpdate((to) =>{
+  //存在文件:使用最新的路由参数请求最新的数据
+  getCategory(to.params.id)
+})
 //获取banner
 const bannerList = ref([])
 const getBanner =async() => {
@@ -19,9 +28,7 @@ const getBanner =async() => {
   })
   bannerList.value = res.result
 }
-onMounted(() => {
-  getBanner()
-})
+
 onMounted(() => getCategory())
 </script>
 
@@ -44,6 +51,7 @@ onMounted(() => getCategory())
           </el-carousel-item>
         </el-carousel>
       </div>
+      <!--   实现分类   -->
       <div class="sub-list">
         <h3>全部分类</h3>
         <ul>
