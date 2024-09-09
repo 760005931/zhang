@@ -1,4 +1,4 @@
-import httpInstance from "@/utils/http.js";
+import request from "@/utils/http.js";
 
 /**
  * 根据给定的id获取分类信息的API函数
@@ -12,8 +12,17 @@ import httpInstance from "@/utils/http.js";
 export function getCategoryAPI(id){
     // 发起HTTP GET请求到'/category'端点，并包含id作为查询参数
     // 使用httpInstance封装HTTP请求以提高代码的复用性和维护性
-    return httpInstance({
+    return request({
         url:`/category`,
+        params:{
+            id
+        }
+    })
+}
+
+export const getCategoryFilterAPI = (id) => {
+    return request({
+        url:'category/sub/filter',
         params:{
             id
         }
